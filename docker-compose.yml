@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  nginx-ui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nginx-ui-healthcheck
+    restart: unless-stopped
+    ports:
+      # HTTP traffic
+      - "80:80"
+      # HTTPS traffic
+      - "443:443"
+      # Nginx status & health check status
+      - "8080:8080"
+      # Nginx UI web interface
+      - "9000:9000"
+    volumes:
+      # Persist Nginx configuration
+      - nginx_config:/etc/nginx
+      # Persist Nginx UI configuration and database
+      - nginx_ui_config:/etc/nginx-ui
+      # Persist logs
+      - nginx_logs:/var/log/nginx
+      - nginx_ui_logs:/var/log/nginx-ui
+      # Optional: Mount SSL certificates
+      # - ./certs:/etc/nginx/ssl:ro
+    environment:
+      - TZ=UTC
+    networks:
+      - nginx_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/nginx_status"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  nginx_config:
+  nginx_ui_config:
+  nginx_logs:
+  nginx_ui_logs:
+
+networks:
+  nginx_network:
+    driver: bridge
