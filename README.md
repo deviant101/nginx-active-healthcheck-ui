@@ -18,7 +18,6 @@ This Docker image combines:
 - ✅ Real-time upstream health status monitoring
 - ✅ Configuration editor with syntax highlighting
 - ✅ Let's Encrypt certificate management
-- ✅ Multi-architecture support (amd64, arm64)
 
 ## Quick Start
 
