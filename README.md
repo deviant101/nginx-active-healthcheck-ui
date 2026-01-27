@@ -193,6 +193,36 @@ server {
 }
 ```
 
+## Backend Server Configuration
+
+A sample nginx configuration file (`backend-nginx.conf`) is included for your backend servers. This config provides a `/health` endpoint that the load balancer uses for health checks.
+
+### Setup on Backend Servers
+
+1. Copy `backend-nginx.conf` to your backend server:
+   ```bash
+   scp backend-nginx.conf user@backend-server:/etc/nginx/nginx.conf
+   ```
+
+2. Restart nginx on the backend:
+   ```bash
+   sudo nginx -t && sudo systemctl restart nginx
+   ```
+
+3. Verify the health endpoint:
+   ```bash
+   curl http://localhost/health
+   # Should return: healthy
+   ```
+
+### Backend Endpoints
+
+| Endpoint | Description |
+|----------|-------------|
+| `/` | Main application (serves `/var/www/html`) |
+| `/health` | Health check endpoint (returns "healthy") |
+| `/status` | Nginx stub status page |
+
 ## Troubleshooting
 
 ### Check Nginx Status
